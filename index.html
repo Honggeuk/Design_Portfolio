@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YB's Portfolio</title>
+    
+    <!-- 5. 파비콘 적용 -->
+    <link rel="icon" href="img/icon.png" type="image/png">
+
+    <!-- Pretendard Font CDN -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <style>
+        /* --- Font Load: Gmarket Sans --- */
+        @font-face {
+            font-family: 'GmarketSansBold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GmarketSansLight';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        /* --- Reset & Global Styles --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            scroll-behavior: smooth;
+        }
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            font-weight: 300; /* Light */
+            color: #333; 
+            overflow-x: hidden; 
+            font-size: 20px; 
+            /* [수정] 반응형을 위해 고정 min-width 제거 및 width 100% 설정 */
+            width: 100%;
+        }
+        ul, li { list-style: none; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        
+        /* Color Variables */
+        :root {
+            --primary-yellow: #FFC000;
+            --primary-black: #111;
+            --point-purple: #6A5ACD;
+            --bg-gray: #EAEAEA;
+        }
+
+        /* --- Header Styles --- */
+        .main-header {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px; 
+            background-color: rgba(17, 17, 17, 0.95); 
+            z-index: 1000; 
+            border-bottom: 1px solid #333;
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-container {
+            width: 100%;
+            max-width: 1746px; 
+            height: 100%;
+            display: flex;
+            justify-content: space-between; /* 양 끝 정렬 */
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* 로고 스타일 (좌측) */
+        .logo {
+            display: flex;
+            align-items: center;
+            height: 40px; 
+        }
+        .logo img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 네비게이션 스타일 (우측) */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 50px; 
+            height: 100%;
+        }
+        .header-nav a {
+            color: #fff;
+            font-family: 'GmarketSansMedium', sans-serif;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+        .header-nav a:hover {
+            color: var(--primary-yellow);
+        }
+
+
+        /* --- Scroll Animation Styles --- */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px); 
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0); 
+        }
+
+        /* --- 1. Hero Section (Top) --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-color: #111;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            width: 100%;
+            height: 100%;
+            background-image: url('img/1_top_txt(x).jpg'); 
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: 1; 
+        }
+
+        .hero-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            /* [수정] 고정 width 대신 max-width 사용 */
+            width: 100%;
+            max-width: 1746px; 
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Hero Text */
+        .hero-text-vertical {
+            position: absolute;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: 'GmarketSansMedium', sans-serif; 
+            color: #FFC000; 
+            line-height: 1.2;
+            cursor: default;
+            font-weight: 500;
+        }
+
+        .text-main {
+            top: 15%; 
+            left: 0; /* PC Default */
+            font-size: 3rem; 
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideDown 1.5s ease-out forwards;
+        }
+
+        .text-sub {
+            bottom: 5%;
+            left: 0; /* PC Default */
+            font-size: 2rem; 
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: slideUp 1.5s ease-out forwards 1s; 
+        }
+
+        .text-desc {
+            position: absolute;
+            top: 14%; 
+            left: 29%; 
+            font-family: 'Pretendard', sans-serif; 
+            font-weight: 300;
+            font-size: 1.2rem; 
+            color: #111; 
+            line-height: 1.5;
+            text-align: left;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards 0.5s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        /* --- 2. About Section --- */
+        .about {
+            background-color: var(--bg-gray);
+            padding: 100px 0; 
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .section-nav-container {
+            text-align: center;
+            margin-bottom: 100px; 
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px; /* 모바일 여백 추가 */
+        }
+        
+        .section-nav-img {
+            width: 100%; 
+            height: auto;
+            display: block;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 0.85fr 1.3fr 0.85fr; 
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            gap: 20px; 
+            align-items: stretch; 
+            padding: 0 20px; /* 모바일 여백 추가 */
+        }
+
+        .info-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            height: 100%;
+        }
+        
+        .info-col.right { text-align: right; align-items: flex-end; }
+        .info-col.left { text-align: left; align-items: flex-start; }
+        .info-col .info-group:last-child { margin-bottom: 0; }
+        
+        .profile-img-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0;
+        }
+
+        .profile-circle {
+            width: 100%;
+            max-width: 520px; 
+            height: auto;
+            display: flex;
+            justify-content: center;
+        }
+        .profile-circle img {
+            width: 100%;
+            height: auto;
+            object-fit: contain; 
+        }
+
+        .info-col h3 { 
+            color: var(--point-purple); 
+            margin-bottom: 20px; 
+            font-size: 2.2rem; 
+            font-family: 'GmarketSansBold', sans-serif;
+            line-height: 1;
+        }
+
+        .info-col p { 
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 300; 
+            font-size: 1.5rem; 
+            margin-bottom: 5px; 
+            color: #222; 
+            line-height: 1.3; 
+            letter-spacing: -0.02em;
+        }
+        
+        .info-group { margin-bottom: 20px; width: 100%; }
+        
+        .tag-text p {
+            color: #444;
+            font-weight: 400; 
+            font-family: 'Pretendard', sans-serif;
+            margin-bottom: 5px;
+            line-height: 1.3; 
+        }
+
+        .skill-item {
+            margin-bottom: 55px;
+            width: 100%;
+        }
+        
+        .skill-name {
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 500; 
+            font-size: 1.5rem; 
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+        
+        .skill-bar {
+            background: #fff;
+            height: 16px; 
+            width: 100%;
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        
+        .skill-fill {
+            height: 100%;
+            background: var(--primary-yellow);
+            border-radius: 100px;
+            width: 0;
+        }
+
+        .scroll-reveal.visible .skill-fill {
+            animation: fillGauge 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        .scroll-reveal.visible .skill-item:nth-of-type(1) .skill-fill { animation-delay: 0.2s; }
+        .scroll-reveal.visible .skill-item:nth-of-type(2) .skill-fill { animation-delay: 0.4s; }
+        .scroll-reveal.visible .skill-item:nth-of-type(3) .skill-fill { animation-delay: 0.6s; }
+        .scroll-reveal.visible .skill-item:nth-of-type(4) .skill-fill { animation-delay: 0.8s; }
+
+        @keyframes fillGauge {
+            from { width: 0; }
+            to { width: var(--target-width); }
+        }
+
+        .philosophy {
+            text-align: center;
+            margin-top: 100px;
+            padding-top: 60px;
+            border-top: 1px solid #ccc;
+            font-size: 1.7rem; 
+            color: #333;
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 300; 
+            line-height: 1.8;
+            letter-spacing: -0.5px;
+            width: 100%;
+            max-width: 1200px; 
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .philosophy strong {
+            font-weight: 600; 
+            font-family: 'Pretendard', sans-serif; 
+        }
+
+        /* --- 3. Portfolio Section --- */
+        .portfolio {
+            background-color: white;
+            padding: 100px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px 24px; 
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px; /* 모바일 여백 추가 */
+        }
+
+        .portfolio-item {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .portfolio-thumb {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #ddd;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .portfolio-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .portfolio-item:hover .portfolio-thumb img {
+            transform: scale(1.1);
+        }
+
+        .portfolio-info {
+            padding-top: 20px;
+            text-align: left;
+        }
+        .pf-title {
+            font-size: 1.3rem;
+            font-weight: 600; 
+            color: #222;
+            margin-bottom: 8px;
+            font-family: 'Pretendard', sans-serif;
+        }
+        .pf-desc {
+            font-size: 1rem;
+            color: var(--point-purple); 
+            font-weight: 500;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        /* --- 4. Footer --- */
+        footer {
+            background-color: black;
+            color: white;
+            padding: 100px 0;
+            display: flex;
+            justify-content: center;
+        }
+        .footer-content {
+            width: 100%;
+            max-width: 1200px; 
+            padding: 0 20px;
+        }
+        .footer-title {
+            font-size: 4rem; 
+            margin-bottom: 60px;
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 700;
+            text-align: left; 
+        }
+        .contact-info {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #fff; 
+            padding-bottom: 60px;
+            margin-bottom: 60px;
+        }
+        .contact-item.left { text-align: left; }
+        .contact-item.right { text-align: left; } 
+        
+        .contact-item h4 { 
+            margin-bottom: 15px; 
+            color: #fff; 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+        }
+        .contact-item p { 
+            font-family: 'Pretendard', sans-serif; 
+            font-weight: 400; 
+            font-size: 1.5rem; 
+            color: #fff; 
+        }
+        
+        .footer-divider {
+            display: none; 
+        }
+
+        .copyright {
+            text-align: center;
+            font-size: 1rem; 
+            color: #555; 
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        .copyright p {
+            margin-bottom: 5px;
+        }
+
+        /* --- 5. Modal Styles --- */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-window {
+            background: white;
+            width: 90%;
+            max-width: 800px; 
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0; 
+            transform: translateY(50px);
+            transition: transform 0.3s ease;
+            
+            border-radius: 7px;
+            
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        
+        .modal-window::-webkit-scrollbar {
+            display: none;
+        }
+
+        .modal-overlay.active .modal-window {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            background-color: #f0f0f0; 
+            border-radius: 50%; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #333;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-close:hover {
+            background-color: #e0e0e0;
+        }
+
+        .modal-text-area {
+            width: 100%;
+            order: 1;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-family: 'Pretendard', sans-serif;
+            font-weight: 700; 
+            font-size: 3rem; 
+            margin-bottom: 20px;
+            color: var(--point-purple); 
+        }
+
+        .modal-tools {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.5rem; 
+            color: var(--primary-yellow); 
+            font-weight: 700; 
+            margin-bottom: 30px;
+        }
+
+        .modal-desc {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.3rem; 
+            line-height: 1.6;
+            color: #444;
+            white-space: pre-line;
+            max-width: 800px;
+        }
+
+        /* [수정] 모달 이미지 영역: 세로 나열 (여백 없음 - Block + font-size 0 + margin-top -1px) */
+        .modal-img-area {
+            width: 100%;
+            order: 2;
+            background-color: transparent;
+            /* Flex 대신 Block 사용: 이미지 틈새 문제 해결에 더 효과적일 수 있음 */
+            display: block; 
+            font-size: 0; /* 텍스트 관련 여백 제거 */
+            line-height: 0; /* 줄간격 여백 제거 */
+            margin: 0;
+            padding: 0;
+        }
+        .modal-img-area img {
+            width: 100%;
+            height: auto;
+            display: block; 
+            border: none;
+            margin: 0;
+            padding: 0;
+            /* 1px 겹침을 유지 */
+            margin-top: -1px; 
+            vertical-align: bottom; /* 하단 기준 정렬 */
+        }
+        /* 첫 번째 이미지는 겹치지 않게 */
+        .modal-img-area img:first-child {
+            margin-top: 0;
+        }
+
+        /* ------------------------------------------------------------
+           RESPONSIVE MEDIA QUERIES (반응형 설정)
+           ------------------------------------------------------------ */
+        
+        /* 1. Tablet & Small Desktop (Max-width: 1024px) */
+        @media screen and (max-width: 1024px) {
+            .header-container { padding: 0 40px; }
+            .hero-container { width: 100%; }
+            .hero-text-vertical { left: 20px; } /* 위치 조정 */
+            
+            .about-content {
+                /* 태블릿에서는 1열로 변경하거나 비율 조정 */
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+            /* [수정] 반응형에서 텍스트 및 정렬 중앙으로 변경 */
+            .info-col.left { order: 2; text-align: center; align-items: center; }
+            .profile-img-area { order: 1; margin-bottom: 30px; }
+            .info-col.right { order: 3; text-align: center; align-items: center; }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2열로 변경 */
+            }
+        }
+
+        /* 2. Mobile (Max-width: 768px) */
+        @media screen and (max-width: 768px) {
+            body { font-size: 16px; } /* 기본 폰트 사이즈 줄임 */
+            
+            /* Header */
+            .main-header { height: 60px; }
+            .header-nav { gap: 20px; }
+            .header-nav a { font-size: 0.9rem; }
+            .logo { height: 30px; }
+
+            /* Hero */
+            .text-main { font-size: 2rem; left: 20px; top: 100px; }
+            .text-sub { font-size: 1.5rem; left: 20px; bottom: 80px; }
+            .text-desc { 
+                font-size: 1rem; 
+                left: 20px; 
+                top: auto; 
+                bottom: 150px; 
+                width: 80%; 
+            }
+
+            /* About */
+            .about { padding: 60px 0; }
+            .section-nav-container { margin-bottom: 50px; }
+            .info-col h3 { font-size: 1.8rem; }
+            .info-col p { font-size: 1.1rem; }
+            .skill-name { font-size: 1.2rem; }
+            .skill-item { margin-bottom: 30px; }
+            .philosophy { font-size: 1.2rem; margin-top: 60px; }
+
+            /* Portfolio */
+            .portfolio { padding: 60px 0; }
+            .portfolio-grid {
+                grid-template-columns: 1fr; /* 1열로 변경 */
+                gap: 40px;
+            }
+            .pf-title { font-size: 1.2rem; }
+            
+            /* Footer */
+            footer { padding: 60px 0; }
+            .footer-title { font-size: 2.5rem; margin-bottom: 40px; }
+            .contact-info { 
+                flex-direction: column; 
+                gap: 40px; 
+            }
+            .contact-item h4 { font-size: 1.8rem; }
+            .contact-item p { font-size: 1.1rem; }
+
+            /* Modal */
+            .modal-window { padding: 40px 20px; width: 95%; }
+            .modal-title { font-size: 2rem; }
+            .modal-tools { font-size: 1.2rem; }
+            .modal-desc { font-size: 1rem; }
+            .modal-close { width: 35px; height: 35px; font-size: 1.5rem; top: 15px; right: 15px; }
+        }
+
+        @media (max-width: 768px) {
+            .modal-window { padding: 40px 20px; }
+            .modal-title { font-size: 2rem; }
+            .modal-tools { font-size: 1.1rem; }
+            .modal-desc { font-size: 1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. Fixed Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <!-- 좌측: 로고 -->
+            <a href="#home" class="logo" onclick="scrollToTop(); return false;">
+                <img src="img/logo2.png" alt="Beans_J">
+            </a>
+            
+            <!-- 우측: 네비게이션 -->
+            <nav class="header-nav">
+                <a onclick="scrollToSection('about')">About me</a>
+                <a onclick="scrollToSection('portfolio')">Portfolio</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+
+        <div class="hero-container">
+            <div class="hero-text-vertical text-main">
+                Born From The Heart <br> All Design Is
+            </div>
+            <div class="hero-text-vertical text-sub">
+                YB'S Portfolio
+            </div>
+            <div class="text-desc">
+                Design with sincerity is<br>
+                beautiful and leave a lasting impression on people
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About Section -->
+    <section class="about" id="about">
+        <div class="section-nav-container scroll-reveal">
+            <img src="img/about.png" alt="About Me Navigation" class="section-nav-img">
+        </div>
+
+        <div class="about-content">
+            <div class="info-col left">
+                <div class="info-group scroll-reveal" style="transition-delay: 0.2s;">
+                    <h3>About Me</h3>
+                    <p>Jo Yun Bin / 조윤빈</p>
+                    <p>1998.01.13</p>
+                    <p>MBTI : INFJ</p>
+                </div>
+                <div class="info-group scroll-reveal" style="transition-delay: 0.4s;">
+                    <h3>Skill</h3>
+                    
+                    <div class="skill-item">
+                        <span class="skill-name">Photoshop</span>
+                        <div class="skill-bar"><div class="skill-fill" style="--target-width: 100%;"></div></div>
+                    </div>
+                    
+                    <div class="skill-item">
+                        <span class="skill-name">Illustrator</span>
+                        <div class="skill-bar"><div class="skill-fill" style="--target-width: 85%;"></div></div>
+                    </div>
+
+                    <div class="skill-item">
+                        <span class="skill-name">Figma</span>
+                        <div class="skill-bar"><div class="skill-fill" style="--target-width: 70%;"></div></div>
+                    </div>
+
+                    <div class="skill-item">
+                        <span class="skill-name">HTML / CSS</span>
+                        <div class="skill-bar"><div class="skill-fill" style="--target-width: 60%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-img-area">
+                <div class="profile-circle scroll-reveal" style="transition-delay: 0.2s;">
+                    <img src="img/2_intro_pic.png" alt="Profile">
+                </div>
+            </div>
+
+            <div class="info-col right">
+                <div class="info-group scroll-reveal" style="transition-delay: 0.2s;">
+                    <h3>Education</h3>
+                    <p>21. 2월 대진대학교</p>
+                    <p>회화 및 캐릭터 아트상품</p>
+                    <p>복수전공, 졸업</p>
+                    <br>
+                    <p>21. 5월 그린 아카데미</p>
+                    <p>웹디자인 & 퍼블리셔 수료</p>
+                </div>
+                <div class="info-group scroll-reveal" style="transition-delay: 0.4s;">
+                    <h3>Experience</h3>
+                    <p>21. 6월 - 24. 4월</p>
+                    <p>(주)더베이글 디자인팀 주임</p>
+                    
+                    <p style="margin-top: 15px;">24. 7월 - 25. 5월</p>
+                    <p>(주)에가든 WD팀 주임</p>
+
+                    <p style="margin-top: 15px;">25. 9월 - 25. 12월</p>
+                    <p>(주)엠피지오 미오사업부 대리</p>
+                </div>
+                <div class="info-group tag-text scroll-reveal" style="transition-delay: 0.6s;">
+                    <h3>Tag</h3>
+                    <p>#디자인과 일심동체</p>
+                    <p>#스케줄 관리의 달인</p>
+                    <p>#만화와 게임을 좋아해요</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="philosophy scroll-reveal" style="transition-delay: 0.8s;">
+            <p>팀에게 있어 디자이너는 <strong>'얼굴을 만드는 사람'</strong> 입니다.</p>
+            <p><strong>'얼굴'</strong>은 사람의 본질을 드러내진 않지만, <strong>'첫인상'</strong>은 <strong>기억에 깊게 남기 쉽습니다.</strong></p>
+            <br>
+            <p><strong>진심이 담긴 디자인</strong>은 <strong>좋은 인상</strong>을 남깁니다.</p>
+            <p>모두에게 <strong>신선한 '첫인상'</strong>으로 남기를 바라며</p>
+            <p>디자인에 마음을 담아 전합니다.</p>
+        </div>
+    </section>
+
+    <!-- 3. Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="section-nav-container scroll-reveal">
+            <img src="img/portfolio.png" alt="Portfolio Navigation" class="section-nav-img">
+        </div>
+
+        <div class="portfolio-grid">
+            <!-- 1행 -->
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.1s" 
+                 onclick="openModal(this)"
+                 data-title="상세 페이지"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_1.jpg"
+                 data-content="가상의 브랜드 'Pirre Cardin'의 의류 상세페이지입니다.&#10;&#10;고객에게 있어 브랜드가 가진 감각적인 느낌과 무드를 전달하고자&#10;부드러운 브라운 컬러를 메인으로 작업하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock1.png" alt="PF1"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">상세 페이지</div>
+                    <div class="pf-desc">개인작업</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.1s"
+                 onclick="openModal(this)"
+                 data-title="상세 페이지"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_2.jpg"
+                 data-content="가상의 브랜드 'Pirre Cardin'의 의류 상세페이지입니다.&#10;&#10;사랑스러운 무드를 찾는 10-20대 여성들을 타겟으로&#10;정보와 핏을 전달하는 부분을 메인으로 작업하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock2.png" alt="PF2"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">상세 페이지</div>
+                    <div class="pf-desc">개인작업</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.1s"
+                 onclick="openModal(this)"
+                 data-title="제품 패키지 디자인"
+                 data-tools="Illustrator / 기여도 100%"
+                 data-img="img/mock_3.jpg"
+                 data-content="'에가든' 브랜드의 트래블러 체커보드 패키지 디자인입니다.&#10;&#10;자유롭고 멋스러운 스케이터 보더들에게 영감을 받아&#10;로고 및 패키지를 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock3.png" alt="PF3"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">제품 패키지 디자인</div>
+                    <div class="pf-desc">에가든</div>
+                </div>
+            </div>
+            
+            <!-- 2행 -->
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.3s"
+                 onclick="openModal(this)"
+                 data-title="이벤트 페이지"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_4.jpg"
+                 data-content="'뉴트리디데이' 브랜드의 콜라겐 상세페이지입니다.&#10;&#10;현대인에게 콜라겐의 중요성을 어필하여&#10;뷰티를 추구하는 소비자를 타겟으로 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock4.png" alt="PF4"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">이벤트 페이지</div>
+                    <div class="pf-desc">더베이글</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.3s"
+                 onclick="openModal(this)"
+                 data-title="상세 페이지"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/m-mock5.jpg"
+                 data-images="img/01.jpg, img/02.jpg, img/03.jpg, img/04.gif, img/05.jpg, img/06.jpg, img/07.jpg, img/08.jpg, img/09.jpg, img/10.jpg, img/11.jpg, img/12.jpg"
+                 data-content="'4Monster' 브랜드의 캠핑의자 상세페이지입니다.&#10;&#10;간편함과 휴대성을 특징으로&#10;30-40대 캠핑족을 타겟으로 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock5.jpg" alt="PF5"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">상세 페이지</div>
+                    <div class="pf-desc">4Monster</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.3s"
+                 onclick="openModal(this)"
+                 data-title="이벤트 컨텐츠"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_6.jpg"
+                 data-content="'뉴트리디데이' 이벤트 컨텐츠입니다.&#10;&#10;가정의 달 컨셉에 맞추어 부드러운 색상을 사용하여&#10;선물하기 좋은 브랜드의 느낌을 표현하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock6.png" alt="PF6"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">이벤트 컨텐츠</div>
+                    <div class="pf-desc">뉴트리디데이</div>
+                </div>
+            </div>
+            
+            <!-- 3행 -->
+            <!-- 7번 아이템: 유튜브 숏츠 추가 -->
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.5s"
+                 onclick="openModal(this)"
+                 data-title="숏츠 컨텐츠"
+                 data-tools="Premier Pro / 기여도 100%"
+                 data-img="img/m-mock7.png"
+                 data-video="img/도넛쇼츠_07.mp4"
+                 data-content="'Doughnut' 브랜드의 제품 홍보 숏츠입니다.&#10;&#10;미니멀한 사이즈와 수납력, 디테일을 특징으로&#10;대본 구상 및 촬영, 편집 작업하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock7.png" alt="PF7"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">숏츠 컨텐츠</div>
+                    <div class="pf-desc">Doughnut</div>
+                </div>
+            </div>
+
+            <!-- 8번 아이템: 유튜브 숏츠 추가 -->
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.5s"
+                 onclick="openModal(this)"
+                 data-title="숏츠 컨텐츠"
+                 data-tools="Premier Pro / 기여도 100%"
+                 data-img="img/m-mock8.jpg"
+                 data-video="img/250309_4몬스터_릴스.mp4"
+                 data-content="'4Monster' 브랜드의 제품 홍보 숏츠입니다.&#10;&#10;가벼움, 방수, 접이식을 특징으로 소비자에게 친근히 다가가는듯한 뉘앙스로&#10;대본 구상 및 촬영, 편집 작업하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock8.jpg" alt="PF8"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">숏츠 컨텐츠</div>
+                    <div class="pf-desc">4Monster</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.5s"
+                 onclick="openModal(this)"
+                 data-title="광고 컨텐츠"
+                 data-tools="Photoshop / 기여도 100%"
+                 data-img="img/mock_9.jpg"
+                 data-content="'에가든' 브랜드의 광고 컨텐츠입니다.&#10;&#10;초경량 특징을 중심으로&#10;30-40대 여성을 타겟으로 가독성을 살려 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock9.png" alt="PF9"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">광고 컨텐츠</div>
+                    <div class="pf-desc">에가든</div>
+                </div>
+            </div>
+
+            <!-- 4행 -->
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.7s"
+                 onclick="openModal(this)"
+                 data-title="이벤트 컨텐츠"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_10.jpg"
+                 data-content="'홀리데이즈' 브랜드의 이벤트 컨텐츠입니다.&#10;&#10;크리스마스 무드에 맞춰 다운된 레드톤으로&#10;선물하기 좋은, 고급스러운 브랜드 무드로 작업하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock10.jpg" alt="PF10"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">이벤트 컨텐츠</div>
+                    <div class="pf-desc">홀리데이즈</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.7s"
+                 onclick="openModal(this)"
+                 data-title="스팟성 특가 디자인"
+                 data-tools="Photoshop / Illustrator / 기여도 100%"
+                 data-img="img/mock_11.jpg"
+                 data-content="'뉴트리디데이' 브랜드의 스팟성 특가 디자인입니다.&#10;&#10;단기간 진행 행사 특징을 살려&#10;눈에 띄는 색상을 사용하여 한 눈에 들어오도록 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock11.jpg" alt="PF11"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">스팟성 특가 디자인</div>
+                    <div class="pf-desc">뉴트리디데이</div>
+                </div>
+            </div>
+
+            <div class="portfolio-item scroll-reveal" style="transition-delay: 0.7s"
+                 onclick="openModal(this)"
+                 data-title="제품 패키지 디자인"
+                 data-tools="Illustrator / 기여도 100%"
+                 data-img="img/mock_12.jpg"
+                 data-content="'에가든' 브랜드의 제품 패키지 디자인입니다.&#10;&#10;슬링백과 핸드폰 스트랩을 합친 디자인으로&#10;디테일과 깔끔한 일러스트를 중심으로 디자인 하였습니다.">
+                <div class="portfolio-thumb"><img src="img/m-mock12.jpg" alt="PF12"></div>
+                <div class="portfolio-info">
+                    <div class="pf-title">제품 패키지 디자인</div>
+                    <div class="pf-desc">에가든</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Footer -->
+    <footer>
+        <div class="footer-content">
+            <h2 class="footer-title">Contact Me</h2>
+            
+            <div class="contact-info">
+                <div class="contact-item left">
+                    <h4>E - Mail</h4>
+                    <p>jellybeans0107@gmail.com</p>
+                </div>
+                <div class="contact-item right">
+                    <h4>Phone Number</h4>
+                    <p>010-8333-1964</p>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="copyright">
+                <p>Copyright©2026. Web Designer 조윤빈</p>
+                <p>본 사이트는 상업적 목적이 아닌 Web Designer 조윤빈의 개인포트폴리오 사이트로 제작되었습니다.<br>
+                일부 이미지 및 폰트 등은 그 출처가 따로 있습니다.</p>
+                <p class="disclaimer">상기 등록한 내용은 사실과 다름 없습니다.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Markup -->
+    <div class="modal-overlay" id="portfolioModal">
+        <div class="modal-window">
+            <div class="modal-close" onclick="closeModal()">&times;</div>
+            
+            <div class="modal-text-area">
+                <h3 class="modal-title" id="modalTitle">Project Title</h3>
+                <p class="modal-tools" id="modalTools">Tools / Info</p>
+                <p class="modal-desc" id="modalDesc">
+                    Description goes here.
+                </p>
+            </div>
+
+            <!-- 여러 이미지가 들어갈 컨테이너 -->
+            <div class="modal-img-area">
+                <!-- Javascript will populate this -->
+                <img id="modalImg" src="" alt="Portfolio Detail">
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Scroll Animation Observer
+            const observerOptions = { threshold: 0.15 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        });
+
+        // Modal Functions
+        const modal = document.getElementById('portfolioModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalTools = document.getElementById('modalTools'); 
+        const modalDesc = document.getElementById('modalDesc');
+        const modalImgArea = document.querySelector('.modal-img-area'); // Select container
+
+        // Smooth Scroll Function with Offset for Header
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const headerOffset = 80; 
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        // Top Scroll Function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function openModal(element) {
+            // Get data from clicked item
+            const title = element.getAttribute('data-title');
+            const tools = element.getAttribute('data-tools'); 
+            const imgSrc = element.getAttribute('data-img');
+            const content = element.getAttribute('data-content');
+            
+            // 유튜브 데이터
+            const youtubeId = element.getAttribute('data-youtube');
+            const videoSrc = element.getAttribute('data-video');
+
+            // 다중 이미지 처리 로직
+            const imagesString = element.getAttribute('data-images');
+            const singleImgSrc = element.getAttribute('data-img');
+
+            // Set text content
+            modalTitle.innerText = title;
+            modalTools.innerText = tools; 
+            modalDesc.innerText = content;
+
+            // 이미지 영역 초기화 후 다시 채우기
+            modalImgArea.innerHTML = ''; 
+
+            if (videoSrc) {
+                const video = document.createElement('video');
+                video.src = videoSrc;
+                video.controls = true;
+                video.autoplay = false; // 수정: 자동 재생 끄기
+                video.loop = true;
+                video.muted = false; // 수정: 소리 켜기 (사용자가 재생 누르면 소리 나옴)
+                video.playsInline = true;
+                video.style.width = '100%';
+                video.style.maxWidth = '400px';
+                video.style.aspectRatio = '9 / 16';
+                video.style.display = 'block';
+                video.style.margin = '0 auto';
+                modalImgArea.appendChild(video);
+            } else if (youtubeId) {
+                // 유튜브 영상 추가 로직 (사용자 레퍼런스 반영)
+                const iframe = document.createElement('iframe');
+                iframe.src = 'https://www.youtube.com/embed/' + youtubeId;
+                iframe.setAttribute('title', 'YouTube video player');
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                iframe.setAttribute('allowfullscreen', ''); // Boolean attribute
+
+                // 쇼츠 비율 및 모달 스타일 적용
+                iframe.style.width = '100%';
+                iframe.style.maxWidth = '400px'; 
+                iframe.style.aspectRatio = '9 / 16';
+                iframe.style.display = 'block';
+                iframe.style.margin = '0 auto';
+                
+                modalImgArea.appendChild(iframe);
+            } else if (imagesString) {
+                // data-images가 있으면 쉼표로 분리해서 여러 장 추가
+                const imageUrls = imagesString.split(',').map(s => s.trim());
+                imageUrls.forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = title + " Detail";
+                    modalImgArea.appendChild(img);
+                });
+            } else if (singleImgSrc) {
+                // data-img만 있으면 한 장 추가
+                const img = document.createElement('img');
+                img.src = singleImgSrc;
+                img.alt = title + " Detail";
+                modalImgArea.appendChild(img);
+            }
+
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
